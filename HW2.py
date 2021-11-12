@@ -52,7 +52,9 @@ res = list(set(op))
 
 # + [markdown] pycharm={}
 # ### a) What task the code above accomplishes
-# The code will scratch the tuple from sample_list with two types: the first type is the tuple whose first element is unique among the whole sample_list, the second type is the tuple with the first elements is equal to another tuple and the third element is the biggest (or share the same maximum with other tuple) among all the tuple with the same first element in the sample_list. Finally, the function will eliminate  the same tuple it scratched and output a list with tuples (the output order is unordered, which may varies between different running environment).
+# The code will return the list of tuples which share the same first element but 
+# have the maximum third element. The tuples which have the unique first element 
+# will also be selected.
 
 # + [markdown] pycharm={}
 # ### b) Code review
@@ -217,6 +219,14 @@ def tup_dict(a,b,sample_list):
     return op
 
 
+# -
+
+# Test the function `tup_for`, `tup_for_adv`, `tup_dict`.
+
+sample_list = [(1, 3, 5), (0, 1, 2), (1, 9, 8)]
+assert(tup_dict(0,2,sample_list)==tup_for_adv(0,2,sample_list))
+assert(tup_dict(0,2,sample_list)==tup_for(0,2,sample_list))
+
 # + [markdown] pycharm={}
 # ### d) Comparisons
 # In this part I will generate different sample_list to compare the execution time of each funtion. In turns of each $n=10, 100, 1000, 10000$, every functions will execute 10 times and calculate the mean.
@@ -297,10 +307,10 @@ def pd_demographic(name, year):
     df = pd.read_sas(name)
     columns = ['SEQN', 'RIDAGEYR', 'RIDRETH3', 'DMDEDUC2', 'DMDMARTL', 
                'RIDSTATR', 'SDMVPSU', 'SDMVSTRA', 'WTMEC2YR', 'WTINT2YR']
-    columns_add = ['unique id', 'age', 'race and ethnicity', 'education',
-            'marital status', 'interview/examination status', 
-            'masked variance pseudo-psu', 'masked variance pseudo-stratum', 
-            'sample exam weight', 'sample interview weight']
+    columns_add = ['id', 'age', 'race', 'education',
+            'marital_status', 'interview_status', 
+            'pseudo_psu', 'pseudo_stratum', 
+            'exam_wt', 'interview_wt']
     df = df[columns]
     df = df.convert_dtypes()
     for i in range(3):
@@ -364,8 +374,8 @@ def pd_health(name, year):
         [m for m in df.columns if re.search(column_2,m) != None])
     df = df[columns_li]
     columns_lower = [m.lower() for m in columns_li]
-    columns_lower[0] = 'unique id'
-    columns_lower[1] = 'dentition code'
+    columns_lower[0] = 'id'
+    columns_lower[1] = 'code'
     df.columns = columns_lower
     df1 = df.convert_dtypes()
     for i in range(61):
@@ -420,8 +430,8 @@ print(df_ohxden.shape)
 # In the final step I will try to calculate the common cases shared by these two datasets according to 'unique id' column.
 
 # + pycharm={}
-demo_id = np.array(df_demo['unique id'],dtype='int64')
-ohxden_id = np.array(df_ohxden['unique id'],dtype='int64')
+demo_id = np.array(df_demo['id'],dtype='int64')
+ohxden_id = np.array(df_ohxden['id'],dtype='int64')
 count_demo = np.bincount(demo_id)
 count_ohxden = np.bincount(ohxden_id)
 c = count_demo + count_ohxden
