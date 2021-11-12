@@ -18,6 +18,13 @@
 # *Dingyu Wang*
 # *September 28, 2021*
 
+# + [markdown] pycharm={}
+# ## Import
+
+# + [markdown] pycharm={}
+# The remaining questions will use the following imports.
+
+# + pycharm={}
 # modules: --------------------------------------------------------------------
 import numpy as np
 import pandas as pd
@@ -27,9 +34,10 @@ from timeit import Timer
 from IPython.core.display import display, HTML
 # 79: -------------------------------------------------------------------------
 
-# ## Question 0
+# + [markdown] pycharm={}
+# ## Quesiton 0
 
-
+# + pycharm={}
 sample_list = [(1, 3, 5), (0, 1, 2), (1, 9, 8)]
 op = []
 for m in range(len(sample_list)):
@@ -42,30 +50,27 @@ for m in range(len(sample_list)):
 res = list(set(op))
 
 
-# ### a)What task the code above accomplishes
-# The code will scratch the tuple from sample_list with two types: the first
-# type is the tuple whose first element is unique among the whole sample_list,
-# the second type is the tuple with the first elements is equal to another
-# tuple and the third element is the biggest (or share the same maximum with
-# other tuple) among all the tuple with the same first element in the sample_
-# list. Finally, the function will eliminate the same tuple it scratched and
-# output a list with tuples (the output order is unordered, which may varies
-# between different running environment).
+# + [markdown] pycharm={}
+# ### a) What task the code above accomplishes
+# The code will return the list of tuples which share the same first element but 
+# have the maximum third element. The tuples which have the unique first element 
+# will also be selected.
 
-
-# ### b)Code review
+# + [markdown] pycharm={}
+# ### b) Code review
 # * Indice out of range.
 # * For loop indentation error.
 # * Iterate over indices only when necessary, else iterate over values.
 # * There is no need to creat a new list res.
 # * Try to apply list comprehensions
 
-
+# + [markdown] pycharm={}
 # ## Question 1
-# In this question, we write a function uses list comprehension to generate a
-# random list of n k-tuples.
 
+# + [markdown] pycharm={}
+# In this question, we write a function uses list comprehension to generate a random list of n k-tuples.
 
+# + pycharm={}
 def generate_list(n, k = 10, low = 0, high = 10):
     '''
     generate a random list of n k-tuples.
@@ -89,28 +94,28 @@ def generate_list(n, k = 10, low = 0, high = 10):
                     for i in range(k)]) for j in range(n)])
 
 
-# In this part we use `assert` to test if `generate_list()` returns a list of
-# tuples.
+# + [markdown] pycharm={}
+# In this part we use `assert` to test if `generate_list()` returns a list of tuples.
 
-
+# + pycharm={}
 test = generate_list(20)
 assert(isinstance(test,list)),"The function doesn't return a list of tuple"
 for m in test:
     assert(isinstance(m,tuple)), "The function doesn't return a list of tuple"
 print("The function does return a list of tuple")
 
+
+# + [markdown] pycharm={}
 # ## Question 2
-# In this question we will write several functions to accomplish the goal that
-# code in Question 0 does. And a Monte carlo simulation is applied to compare
-# the execution times of each functions.
 
+# + [markdown] pycharm={}
+# In this question we will write several functions to accomplish the goal that code in Question 0 does. And a Monte carlo simulation is applied to compare the execution times of each functions.
+
+# + [markdown] pycharm={}
 # ### a) tup_for()
-# This function is totally a copy of the code in Question 0, we only
-# encapsulate it into a function, with input `a` represent the first indices,
-# `b` represent the second indices and `sample_list` represent the list we cope
-# with.
+# This function is totally a copy of the code in Question 0, we only encapsulate it into a function, with input `a` represent the first indices, `b` represent the second indices and `sample_list` represent the list we cope with.
 
-
+# + pycharm={}
 def tup_for(a,b,sample_list):
     '''
     Apply for loop to select tuples in a list.
@@ -140,13 +145,11 @@ def tup_for(a,b,sample_list):
     return res 
 
 
+# + [markdown] pycharm={}
 # ### b) tup_for_adv()
-# In this function I apply the advice in code review to make the code more
-# efficient and literate. Specifically, I use list comprehensions instead of
-# simple for loop, iterate the list over values instead of indices and avoid
-# redundant list generation.
+# In this function I apply the advice in code review to make the code more efficient and literate. Specifically, I use list comprehensions instead of simple for loop, iterate the list over values instead of indices and avoid redundant list generation.
 
-
+# + pycharm={}
 def tup_for_adv(a,b,sample_list):
     '''
     An advanced function using for loop to select tuples in a list.
@@ -173,21 +176,13 @@ def tup_for_adv(a,b,sample_list):
     return op
 
 
+# + [markdown] pycharm={}
 # ### c) tup_dict()
-# I use nested dictionaries to achieve the goal of the code in Question 0.
-# Specifically, I use defaultdict to generate nested dictionary. The keys in
-# outer dictionary will store the first indices of each tuple, the keys in
-# inner dictionary will store the second indices of each tuple, and the values
-# in inner dictionary will calculate the number of tuples with the first and
-# second indices corresponding to the values of keys in the dictionary. In this
-# way, we can calculate the number of tuples we want and do the following step.
+# I use nested dictionaries to achieve the goal of the code in Question 0. Specifically, I use defaultdict to generate nested dictionary. The keys in outer dictionary will store the first indices of each tuple, the keys in inner dictionary will store the second indices of each tuple, and the values in inner dictionary will calculate the number of tuples with the first and second indices corresponding to the values of keys in the dictionary. In this way, we can calculate the number of tuples we want and do the following step.
 #
-# In this function I apply two independent for loop with sample_list. The first
-# for loop is to transmit the information from sample_list to dictionary, the
-# second for loop is to indices the sample_list according to our dictionary.
-# List comprehension is also used to make the code more efficient.
+# In this function I apply two independent for loop with sample_list. The first for loop is to transmit the information from sample_list to dictionary, the second for loop is to indices the sample_list according to our dictionary. List comprehension is also used to make the code more efficient.
 
-
+# + pycharm={}
 def tup_dict(a,b,sample_list):
     '''
     Apply dictionary to select tuples in a list.
@@ -224,12 +219,19 @@ def tup_dict(a,b,sample_list):
     return op
 
 
+# -
+
+# Test the function `tup_for`, `tup_for_adv`, `tup_dict`.
+
+sample_list = [(1, 3, 5), (0, 1, 2), (1, 9, 8)]
+assert(tup_dict(0,2,sample_list)==tup_for_adv(0,2,sample_list))
+assert(tup_dict(0,2,sample_list)==tup_for(0,2,sample_list))
+
+# + [markdown] pycharm={}
 # ### d) Comparisons
-# In this part I will generate different sample_list to compare the execution
-# time of each funtion. In turns of each $n=10, 100, 1000, 10000$, every
-# functions will execute 10 times and calculate the mean.
+# In this part I will generate different sample_list to compare the execution time of each funtion. In turns of each $n=10, 100, 1000, 10000$, every functions will execute 10 times and calculate the mean.
 
-
+# + pycharm={}
 # timing comparisons: ---------------------------------------------------------
 res = collections.defaultdict(list)
 n = [10,100,1000,10000]
@@ -241,6 +243,7 @@ for k in n:
         m = np.mean([t.timeit(1) for i in range(10)])
         res[f.__name__].append(round(m,6))
 
+# + pycharm={}
 # construct a table, include a caption: ---------------------------------------
 cap = """
 <b> Table 1.</b> <em> Timing comparisons for tuple selection functions.</em>
@@ -255,30 +258,31 @@ for i, line in enumerate(t1):
     tab1 += line
     if i < (len(t1) - 1):
         tab1 += '\n'
+
+# + pycharm={}
 display(HTML(tab1))
 
 
-# Apparently, we nested two for loops in the original code snippet, and the
-# code running time is extremely long when  𝑛  is large. In the advanced
-# format, even though we keep nesting two for loops, but as we apply the list
-# comprehensions and reduce the redundancy, the running time is a little
-# improved. As for the third function, we only apply two for loop independently
-# and introduce dictionary to achieve our goal and the running time is improved
-# a lot according to Table 1.
+# -
 
+# Apparently, we nested two for loops in the original code snippet, and the code running time is extremely long when $n$ is large. In the advanced format, even though we keep nesting two for loops, but as we apply the list comprehensions and reduce the redundancy, the running time is a little improved. As for the third function, we only apply two for loop independently and introduce dictionary to achieve our goal and the running time is improved a lot according to Table 1.
 
+# + [markdown] pycharm={}
 # ## Question 3
-# In this question we will use Pandas to read, clean, and append several data
-# files from the National Health and Nutrition Examination Survey NHANES.
 
+# + [markdown] pycharm={}
+# In this question we will use Pandas to read, clean, and append several data files from the National Health and Nutrition Examination Survey NHANES.
+
+# + [markdown] pycharm={}
 # ### a) Read and append the demographic datasets
-# The target of the function is to
+
+# + [markdown] pycharm={}
+# The target of the function is to 
 # * Choose specific columns and rename the columns with literate variable names
-# * Add an additional column identifying to which cohort each case belongs
-# ("years" + "datasets name").
-# * Cope with missing data and convert each column to an appropriate type.
+# * Add an additional column identifying to which cohort each case belongs ("years" + "datasets name").
+# * Cope with missing data and convert each column to an appropriate type. 
 
-
+# + pycharm={}
 def pd_demographic(name, year):
     '''
     Read and append the '.XPT' file of demographic datasets.
@@ -303,10 +307,10 @@ def pd_demographic(name, year):
     df = pd.read_sas(name)
     columns = ['SEQN', 'RIDAGEYR', 'RIDRETH3', 'DMDEDUC2', 'DMDMARTL', 
                'RIDSTATR', 'SDMVPSU', 'SDMVSTRA', 'WTMEC2YR', 'WTINT2YR']
-    columns_add = ['unique id', 'age', 'race and ethnicity', 'education',
-            'marital status', 'interview/examination status', 
-            'masked variance pseudo-psu', 'masked variance pseudo-stratum', 
-            'sample exam weight', 'sample interview weight']
+    columns_add = ['id', 'age', 'race', 'education',
+            'marital_status', 'interview_status', 
+            'pseudo_psu', 'pseudo_stratum', 
+            'exam_wt', 'interview_wt']
     df = df[columns]
     df = df.convert_dtypes()
     for i in range(3):
@@ -319,9 +323,9 @@ def pd_demographic(name, year):
     return df
 
 
-# Read the files directly from the website and apply the function abrove to 
-# each dataset and finally save the processed DataFrame into a pickle format.
+# -
 
+# Read the files directly from the website and apply the function abrove to each dataset and finally save the processed DataFrame into a pickle format.
 
 url = 'https://wwwn.cdc.gov/Nchs/Nhanes/'
 years = ['2011-2012', '2013-2014', '2015-2016', '2017-2018']
@@ -333,8 +337,11 @@ for i in range(4):
     df.to_pickle(file_name)  
 
 
-# ### b) Read and append the oral health and dentition datasets
+# + [markdown] pycharm={}
+# ### b) Read and append the  oral health and dentition data.
+# -
 
+# This part fairly do the same job as part a). One thing to mention is that I use regular expressionsin to find the columns with the format "OHXXXCTC" and "OHXXXTC".
 
 def pd_health(name, year):
     '''
@@ -362,28 +369,27 @@ def pd_health(name, year):
     column_1 = r'OHX\d\dCTC'
     column_2 = r'OHX\d\dTC'
     columns_li.extend(
-        [m for m in df.columns if re.search(column_1, m) != None])
+        [m for m in df.columns if re.search(column_1,m) != None])
     columns_li.extend(
-        [m for m in df.columns if re.search(column_2, m) != None])
+        [m for m in df.columns if re.search(column_2,m) != None])
     df = df[columns_li]
     columns_lower = [m.lower() for m in columns_li]
-    columns_lower[0] = 'unique id'
-    columns_lower[1] = 'dentition code'
+    columns_lower[0] = 'id'
+    columns_lower[1] = 'code'
     df.columns = columns_lower
     df1 = df.convert_dtypes()
     for i in range(61):
-        df1.iloc[:, i + 1] = pd.Categorical(df1.iloc[:, i + 1])
+        df1.iloc[:,i+1] = pd.Categorical(df1.iloc[:,i+1])
     cohort = 'NHANES' + ' ' + year
-    df2 = pd.DataFrame({'cohort': [cohort for i in range(len(df.index))]},
+    df2 = pd.DataFrame({'cohort':[cohort for i in range(len(df.index))]}, 
                        index=df.index)
-    df1 = pd.concat([df1, df2], axis=1)
+    df1 = pd.concat([df1,df2], axis=1)  
     return df1
 
 
-# Read the files directly from the website and apply the function abrove to 
-# each dataset and finally save the processed DataFrame into a pickle format.
+# Read the files directly from the website and apply the function abrove to each dataset and finally save the processed DataFrame into a pickle format.
 
-
+# + pycharm={}
 url = 'https://wwwn.cdc.gov/Nchs/Nhanes/'
 years = ['2011-2012', '2013-2014', '2015-2016', '2017-2018']
 names_2 = ['OHXDEN_G.XPT', 'OHXDEN_H.XPT', 'OHXDEN_I.XPT', 'OHXDEN_J.XPT']
@@ -393,11 +399,13 @@ for i in range(4):
     file_name = years[i] + ' ' + 'oral health - dentition.plk'
     df.to_pickle(file_name)
 
-
+# + [markdown] pycharm={}
 # ### c) Number of cases there are in the two datasets
-# In this step I will combine the dataset from different year together and
-# reindex the DataFrame to calculate the number of cases in each datasets.
 
+# + [markdown] pycharm={}
+# In this step I will read the data we saved in pickle format and then combine the dataset from different year together and reindex the DataFrame to calculate the number of cases in each datasets.
+
+# + pycharm={}
 # calculate cases in each dataset: --------------------------------------------
 df_demo = pd.concat([pd.read_pickle(years[i] + ' ' + 'demographic.plk')
                      for i in range(4)])
@@ -410,23 +418,25 @@ df_ohxden = pd.concat(
 )
 df_ohxden = df_ohxden.reset_index()
 df_ohxden = df_ohxden.drop(columns = ['index'])
+
+# + [markdown] pycharm={}
+# There are 39156 cases in the demographic datasets and 35909 cases in the ohxden datasets.
+# -
+
 print(df_demo.shape)
 print(df_ohxden.shape)
 
+# + [markdown] pycharm={}
+# In the final step I will try to calculate the common cases shared by these two datasets according to 'unique id' column.
 
-# There are 39156 cases in the demographic datasets and 35909 cases in the
-# ohxden datasets.
-
-
-# Calculate common cases: -----------------------------------------------------
-demo_id = np.array(df_demo['unique id'], dtype='int64')
-ohxden_id = np.array(df_ohxden['unique id'], dtype='int64')
+# + pycharm={}
+demo_id = np.array(df_demo['id'],dtype='int64')
+ohxden_id = np.array(df_ohxden['id'],dtype='int64')
 count_demo = np.bincount(demo_id)
 count_ohxden = np.bincount(ohxden_id)
 c = count_demo + count_ohxden
 count = [idx for idx, val in enumerate(c) if val == 2]
 len(count)
 
-
-# There are 35909 cases are both in the demographic datasets and ohxden
-# datasets.
+# + [markdown] pycharm={}
+# There are 35909 cases are both in the demographic datasets and ohxden datasets.
