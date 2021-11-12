@@ -328,8 +328,6 @@ ohx = pd.read_pickle('oral health - dentition_1.pickle')
 merge_data = pd.merge(
     demo, ohx.loc[:,['id', 'dentition_status']], how='left', on='id')
 
-merge_data
-
 # In this step, I set the "college" column to two levels with
 # "some college/college graduate" and "No college/<20".
 
@@ -447,7 +445,7 @@ def cal(df):
     DataFrame with the mean and variance of the age.
     '''
     return(pd.DataFrame({
-        'age': '({0:4.2f}, {1:4.2f})'.format(
+        'age': '({0:3.1f}, {1:3.1f})'.format(
             df['age'].mean(), df['age'].std()
         )
     }, index=[0]))
@@ -489,10 +487,10 @@ def count_per(df,var):
         b.groupby(var).agg(lambda x: [x[0]/(x[0]+x[1]), x[1]/(x[0]+x[1])]),
         columns=['percent'])
     b = pd.merge(b.unstack(level=0),b_pre,on=var)
-    b.iloc[0,0] = '({0:4.0f}, {1:6.4f})'.format(b.iloc[0,0], b.iloc[0,2][0])
-    b.iloc[0,1] = '({0:4.0f}, {1:6.4f})'.format(b.iloc[0,1], b.iloc[0,2][1])
-    b.iloc[1,0] = '({0:4.0f}, {1:6.4f})'.format(b.iloc[1,0], b.iloc[1,2][0])
-    b.iloc[1,1] = '({0:4.0f}, {1:6.4f})'.format(b.iloc[1,1], b.iloc[1,2][1])
+    b.iloc[0,0] = '({0:4.0f}, {1:3.1f}%)'.format(b.iloc[0,0], b.iloc[0,2][0]*100)
+    b.iloc[0,1] = '({0:4.0f}, {1:3.1f}%)'.format(b.iloc[0,1], b.iloc[0,2][1]*100)
+    b.iloc[1,0] = '({0:4.0f}, {1:3.1f}%)'.format(b.iloc[1,0], b.iloc[1,2][0]*100)
+    b.iloc[1,1] = '({0:4.0f}, {1:3.1f}%)'.format(b.iloc[1,1], b.iloc[1,2][1]*100)
     b = b.drop(columns = ['percent'])
     return b
 
@@ -516,10 +514,10 @@ p_res = result.reset_index()
 # Apply the t test to check the difference in mean and calculate the p value.
 # `stats.ttest_ind()` is used to do the t test in python.
 
-mean_c = float(p_res.loc[0,'complete'][1:6])
-std_c = float(p_res.loc[0,'complete'][7:13])
-mean_m = float(p_res.loc[0,'missing'][1:6])
-std_m = float(p_res.loc[0,'missing'][7:13])
+mean_c = float(p_res.loc[0,'complete'][1:5])
+std_c = float(p_res.loc[0,'complete'][7:11])
+mean_m = float(p_res.loc[0,'missing'][1:5])
+std_m = float(p_res.loc[0,'missing'][7:11])
 est = abs(mean_m-mean_c)/np.sqrt(std_m**2/(34360) + std_c ** 2/(3039))
 p = 2*(1-stats.norm.cdf(est))
 
@@ -527,7 +525,10 @@ x = newtab[newtab['ohx']=='complete']['age']
 y = newtab[newtab['ohx']=='missing']['age']
 
 p = stats.ttest_ind(x,y, equal_var=False)[1]
-p = str(p)[:6] + str(p)[-5:]
+if p<0.001:
+    p = 'p<0.001'
+else:
+    p = p
 
 
 # For the following codes, I calculate the p value of 2*2 contingency table
@@ -556,15 +557,20 @@ def chi_test(df):
 p_value = [p]
 for i in range(0,6,2):
     df = p_res.loc[i+1:i+2,:].reset_index(drop=True)
-    p = str(chi_test(df))
+    p = chi_test(df)
     if i != 2:
-        p_value.extend([str(p)[:6]+str(p)[-4:],'-'])
+        if p<0.001:
+            p_value.extend(['p<0.001','-'])
+        else:
+            p_value.extend([str(p),'-'])
     else:
         p_value.extend([str(p)[:6],'-'])
 
 p_res['p value'] = p_value
 
 p_res = p_res.set_index(['variables','type'])
+
+p_res
 
 tab = p_res.to_html(escape=False, justify='left')
 cap = """
